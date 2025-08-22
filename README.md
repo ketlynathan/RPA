@@ -20,7 +20,7 @@ Este projeto automatiza o processo de geração de relatórios anuais para forne
 
 ## 🚀 Tecnologias Utilizadas
 
-- **UiPath Studio**: Versão [insira a versão utilizada, ex.: 2023.10].
+- **UiPath Studio**: Versão [2022.10].
 - **Framework**: Robotic Enterprise Framework (REFramework).
 - **Linguagem**: Workflows em XAML, com scripts em VB.NET (se aplicável).
 - **Ferramentas de Configuração**: Arquivo `Config.xlsx` para configurações externas e ativos do UiPath Orchestrator.

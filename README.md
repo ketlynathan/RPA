@@ -22,7 +22,7 @@ Este projeto automatiza o processo de geração de relatórios anuais para forne
 
 - **UiPath Studio**: Versão [2022.10].
 - **Framework**: Robotic Enterprise Framework (REFramework).
-- **Linguagem**: Workflows em XAML, com scripts em VB.NET (se aplicável).
+- **Linguagem**: Workflows em XAML, com scripts em VB.NET.
 - **Ferramentas de Configuração**: Arquivo `Config.xlsx` para configurações externas e ativos do UiPath Orchestrator.
 - **Aplicações**: Sistema interno da ACME Systems Inc. (System 1).
 - **Controle de Versão**: Git, hospedado no GitHub.

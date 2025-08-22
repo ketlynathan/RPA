@@ -1,40 +1,114 @@
-### Documentation is included in the Documentation folder ###
+# Prova Final do Curso Avançado de UiPath: Geração de Relatório Anual
 
-[REFrameWork Documentation](https://github.com/UiPath/ReFrameWork/blob/master/Documentation/REFramework%20documentation.pdf)
+Bem-vindo ao repositório da **Prova Final do Curso Avançado de UiPath**, desenvolvido como parte do programa de certificação avançada em automação de processos robóticos (RPA). Este projeto implementa a automação do processo **"Generate Yearly Report for Vendor"**, utilizando o **Robotic Enterprise Framework (REFramework)** da UiPath, com foco em eficiência, escalabilidade e conformidade com as melhores práticas de automação.
 
-### REFrameWork Template ###
-**Robotic Enterprise Framework**
+## 📋 Descrição do Projeto
 
-* Built on top of *Transactional Business Process* template
-* Uses *State Machine* layout for the phases of automation project
-* Offers high level logging, exception handling and recovery
-* Keeps external settings in *Config.xlsx* file and Orchestrator assets
-* Pulls credentials from Orchestrator assets and *Windows Credential Manager*
-* Gets transaction data from Orchestrator queue and updates back status
-* Takes screenshots in case of system exceptions
+Este projeto automatiza o processo de geração de relatórios anuais para fornecedores na empresa fictícia **ACME Systems Inc.**, dentro do departamento de **Finanças e Contabilidade**. A automação consiste em baixar relatórios mensais de um fornecedor específico, com base em seu **Tax ID**, e consolidá-los em um relatório anual no formato Excel, gerando também um **Upload ID** para rastreamento.
+
+### Objetivos da Automação
+- **Redução de Tempo**: Acelerar o processamento de relatórios anuais, reduzindo o tempo médio de manuseio de 15 minutos por fornecedor.
+- **Aumento de Eficiência**: Automatizar 100% do processo, eliminando atividades manuais demoradas.
+- **Confiabilidade**: Garantir precisão e consistência na geração de relatórios, com tratamento robusto de exceções.
+
+### Funcionalidades Principais
+- **Download de Relatórios Mensais**: Recuperação automática de relatórios mensais com base no Tax ID do fornecedor.
+- **Consolidação de Dados**: Geração de um relatório anual consolidado no formato Excel.
+- **Tratamento de Exceções**: Ignora meses com relatórios ausentes (1 a 3 relatórios por fornecedor, conforme especificado).
+- **Integração com Orchestrator**: Gerenciamento de filas e ativos para transações e credenciais.
+- **Logging e Monitoramento**: Registro detalhado de eventos e captura de screenshots em caso de erros do sistema.
+
+## 🚀 Tecnologias Utilizadas
+
+- **UiPath Studio**: Versão [insira a versão utilizada, ex.: 2023.10].
+- **Framework**: Robotic Enterprise Framework (REFramework).
+- **Linguagem**: Workflows em XAML, com scripts em VB.NET (se aplicável).
+- **Ferramentas de Configuração**: Arquivo `Config.xlsx` para configurações externas e ativos do UiPath Orchestrator.
+- **Aplicações**: Sistema interno da ACME Systems Inc. (System 1).
+- **Controle de Versão**: Git, hospedado no GitHub.
+
+## 📂 Estrutura do Repositório
+
+O repositório está organizado para facilitar a navegação, manutenção e reutilização do projeto:
+
+```
+📦 ProvaFinal_UiPath_GenerateYearlyReport
+├── 📂 Config
+│   └── Settings.xaml          # Configurações globais do processo
+│   └── Config.xlsx           # Parâmetros, incluindo Tax ID e caminhos de arquivos
+├── 📂 Data
+│   ├── 📂 Input              # Relatórios mensais de entrada (ex.: CSVs, PDFs)
+│   ├── 📂 Output             # Relatórios anuais gerados (Excel)
+│   └── 📂 Temp               # Arquivos temporários
+├── 📂 Framework              # Estrutura do REFramework
+│   ├── InitAllSettings.xaml  # Inicialização de configurações
+│   ├── GetAppCredentials.xaml # Obtenção de credenciais
+│   ├── InitAllApplications.xaml # Abertura do System 1
+│   ├── GetTransactionData.xaml # Recuperação de transações
+│   ├── SetTransactionStatus.xaml # Atualização de status
+│   ├── CloseAllApplications.xaml # Encerramento do System 1
+│   └── Main.xaml             # Workflow principal
+├── 📂 Workflows              # Workflows específicos do processo
+│   ├── Process.xaml          # Lógica de consolidação do relatório anual
+│   └── DownloadMonthlyReports.xaml # Download de relatórios mensais
+├── 📂 Documentation          # Documentação do projeto
+│   └── ProcessDesignDocument.pdf # Documento de design do processo
+├── 📄 README.md              # Documentação principal
+├── 📄 LICENSE                # Licença do projeto
+└── 📄 .gitignore             # Arquivos e pastas ignorados pelo Git
+```
+
+## ⚙️ Como Funciona o REFramework
+
+O processo utiliza o **Robotic Enterprise Framework (REFramework)**, estruturado em máquina de estados para gerenciar transações de forma eficiente. Abaixo está o fluxo do processo:
+
+1. **Inicialização do Processo**  
+   - **`Framework/InitAllSettings.xaml`**: Carrega configurações do `Config.xlsx` (ex.: Tax ID, caminhos de arquivos) e ativos do Orchestrator.  
+   - **`Framework/GetAppCredentials.xaml`**: Recupera credenciais do System 1 via Orchestrator ou Windows Credential Manager.  
+   - **`Framework/InitAllApplications.xaml`**: Abre e autentica o System 1.
+
+2. **Obtenção de Dados de Transação**  
+   - **`Framework/GetTransactionData.xaml`**: Recupera o Tax ID do fornecedor de uma fila do Orchestrator, conforme definido em `Config("OrchestratorQueueName")`.
+
+3. **Processamento de Transações**  
+   - **`Process.xaml`**: Baixa relatórios mensais, consolida os dados em um relatório anual (Excel) e gera o Upload ID.  
+   - **`Framework/SetTransactionStatus.xaml`**: Atualiza o status da transação no Orchestrator:  
+     - **Sucesso**: Relatório gerado com sucesso.  
+     - **Exceção de Regra de Negócio**: Relatórios mensais ausentes (1 a 3 por fornecedor) são ignorados.  
+     - **Exceção de Sistema**: Erros técnicos, com captura de screenshots.
+
+4. **Finalização do Processo**  
+   - **`Framework/CloseAllApplications.xaml`**: Realiza logout e fecha o System 1.
+
+### Documentação Adicional
+Para detalhes completos do processo, consulte o **Process Design Document** na pasta `Documentation`:  
+- [Process Design Document](Documentation/ProcessDesignDocument.pdf)  
+- [Documentação Oficial do REFramework](https://github.com/UiPath/ReFrameWork/blob/master/Documentation/REFramework%20documentation.pdf)
 
 
-### How It Works ###
+### Configuração para Novos Projetos
+Para adaptar o projeto a outros cenários:
+1. **Config.xlsx**: Ajuste os campos para incluir novos fornecedores ou configurações específicas.  
+2. **Workflows de Inicialização e Finalização**: Configure `InitAllApplications.xaml` e `CloseAllApplications.xaml` para interagir com outras aplicações.  
+3. **Transações**: Modifique `GetTransactionData.xaml` e `SetTransactionStatus.xaml` para outras fontes de dados, se necessário.  
+4. **Processamento**: Personalize `Process.xaml` e workflows adicionais para novos processos.
 
-1. **INITIALIZE PROCESS**
- + ./Framework/*InitiAllSettings* - Load configuration data from Config.xlsx file and from assets
- + ./Framework/*GetAppCredential* - Retrieve credentials from Orchestrator assets or local Windows Credential Manager
- + ./Framework/*InitiAllApplications* - Open and login to applications used throughout the process
+## 📜 Histórico do Documento
 
-2. **GET TRANSACTION DATA**
- + ./Framework/*GetTransactionData* - Fetches transactions from an Orchestrator queue defined by Config("OrchestratorQueueName") or any other configured data source
+O projeto foi desenvolvido com base no **Process Design Document**, revisado e atualizado conforme o histórico abaixo:
 
-3. **PROCESS TRANSACTION**
- + *Process* - Process trasaction and invoke other workflows related to the process being automated 
- + ./Framework/*SetTransactionStatus* - Updates the status of the processed transaction (Orchestrator transactions by default): Success, Business Rule Exception or System Exception
+| Data       | Versão | Função       | Nome             | Organização       | Comentários         |
+|------------|--------|--------------|------------------|-------------------|---------------------|
+| 01/08/2017 | 1.0    | Autor        | Olfa Ben Taarit  | ACME Systems Inc. | Criação v1.0        |
+| 06/09/2017 | 1.2    | Revisor      | Vrabie Stefan    | UiPath            | Aprovado v1.0       |
+| 20/01/2018 | 1.3    | Revisor      | Vrabie Stefan    | UiPath            | Atualizado v1.2     |
+| 13/01/2019 | 1.4    | Revisor      | Silviu Predan    | UiPath            | Atualizado v1.3     |
 
-4. **END PROCESS**
- + ./Framework/*CloseAllApplications* - Logs out and closes applications used throughout the process
+## 📜 Licença
 
+Este projeto está licenciado sob a [Licença MIT](LICENSE). Consulte o arquivo `LICENSE` para mais detalhes.
 
-### For New Project ###
+## 🙌 Agradecimentos
 
-1. Check the Config.xlsx file and add/customize any required fields and values
-2. Implement InitiAllApplications.xaml and CloseAllApplicatoins.xaml workflows, linking them in the Config.xlsx fields
-3. Implement GetTransactionData.xaml and SetTransactionStatus.xaml according to the transaction type being used (Orchestrator queues by default)
-4. Implement Process.xaml workflow and invoke other workflows related to the process being automated
+Agradeço à UiPath pelo curso avançado de RPA, que proporcionou o conhecimento necessário para desenvolver esta automação. Agradeço também à equipe da ACME Systems Inc. e à comunidade RPA por compartilhar práticas que enriqueceram este projeto.
+
